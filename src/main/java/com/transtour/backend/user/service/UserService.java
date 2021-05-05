@@ -1,0 +1,58 @@
+package com.transtour.backend.user.service;
+
+import com.github.dozermapper.core.Mapper;
+import com.transtour.backend.user.dto.UserAccountDTO;
+import com.transtour.backend.user.dto.UserDTO;
+import com.transtour.backend.user.exception.InactiveUser;
+import com.transtour.backend.user.exception.UserNotExists;
+import com.transtour.backend.user.model.User;
+import com.transtour.backend.user.repository.UserRepository;
+import com.transtour.backend.user.util.TokenUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+
+@Service
+public class UserService {
+
+    @Autowired
+    @Qualifier("userRepo")
+    UserRepository repository;
+
+    @Autowired
+    private Mapper mapper;
+
+    public CompletableFuture<String> generateToken(UserDTO userDTO){
+
+        CompletableFuture<String> completableFuture = CompletableFuture.supplyAsync(
+                ()->{
+                    Optional<User> optionalUser = repository.findByUserNameAndPassword(userDTO.getUser(), userDTO.getPassword());
+                    optionalUser.orElseThrow(UserNotExists::new);
+                    User user = optionalUser.get();
+                    if(!user.isEnabled()) throw new InactiveUser();
+                    return TokenUtil.createJWT("1",user.getUserName(),"generacion token",2000L);
+                }
+        );
+
+        return completableFuture;
+    }
+
+    public CompletableFuture<UserAccountDTO> find(String userName){
+
+        CompletableFuture<UserAccountDTO> completableFuture = CompletableFuture.supplyAsync(
+                ()->{
+                    Optional<User> optionalUser = repository.findByUserName(userName);
+                    optionalUser.orElseThrow(UserNotExists::new);
+                    User user = optionalUser.get();
+                    UserAccountDTO userAccountDTO = new UserAccountDTO();
+                    mapper.map(user,userAccountDTO);
+                    return userAccountDTO;
+                }
+        );
+
+        return completableFuture;
+    }
+}
