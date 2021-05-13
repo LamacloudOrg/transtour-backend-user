@@ -7,8 +7,17 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+
 public class UserDTO {
 
-    private String user;
+    private String userName;
     private String password;
+
+    @Override
+    public String toString() {
+        return "UserDTO{" +
+                "userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
 }

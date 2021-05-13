@@ -2,34 +2,52 @@ package com.transtour.backend.user.controller;
 
 import com.transtour.backend.user.dto.UserAccountDTO;
 import com.transtour.backend.user.dto.UserDTO;
+import com.transtour.backend.user.model.User;
 import com.transtour.backend.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/v1/user")
+@CrossOrigin("*")
 public class UserController {
 
     @Autowired
     UserService service;
 
-    @GetMapping("/oauth/token")
+    @PostMapping("/oauth/token")
     @ResponseStatus(HttpStatus.OK)
-    public CompletableFuture<String> login(UserDTO user){
+    public CompletableFuture<String> login(@RequestBody  UserDTO user){
         return service.generateToken(user);
     }
+
+    @PostMapping("/oauth/refresh")
+    @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
+    public String refreshToken(@RequestBody  UserDTO user){
+        return "por implementar";
+    }
+
 
     @GetMapping
     @RolesAllowed({"ROLE_ADMIN"})
     @ResponseStatus(HttpStatus.OK)
-    public CompletableFuture<UserAccountDTO> findUser(String userName){
+    public CompletableFuture<UserAccountDTO> findUser(@RequestParam("userName") String userName){
         return service.find(userName);
     }
+
+    @GetMapping("drivers")
+    @RolesAllowed({"ROLE_ADMIN"})
+    @ResponseStatus(HttpStatus.OK)
+    public CompletableFuture<List<UserAccountDTO>> findUserDrivers(Pageable pageable){
+        String role = "ROLE_DRIVER";
+        return service.findDrivers(role,pageable);
+    }
+
+
 }

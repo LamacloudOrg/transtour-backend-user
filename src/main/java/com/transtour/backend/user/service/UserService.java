@@ -11,9 +11,13 @@ import com.transtour.backend.user.util.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Pageable;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -29,7 +33,8 @@ public class UserService {
 
         CompletableFuture<String> completableFuture = CompletableFuture.supplyAsync(
                 ()->{
-                    Optional<User> optionalUser = repository.findByUserNameAndPassword(userDTO.getUser(), userDTO.getPassword());
+                    Optional<User> optionalUser = repository.findByUserNameAndPassword(userDTO.getUserName(), userDTO.getPassword());
+
                     optionalUser.orElseThrow(UserNotExists::new);
                     User user = optionalUser.get();
                     if(!user.isEnabled()) throw new InactiveUser();
@@ -50,6 +55,23 @@ public class UserService {
                     UserAccountDTO userAccountDTO = new UserAccountDTO();
                     mapper.map(user,userAccountDTO);
                     return userAccountDTO;
+                }
+        );
+
+        return completableFuture;
+    }
+
+    public CompletableFuture<List<UserAccountDTO>> findDrivers(String role,Pageable pageable){
+
+        CompletableFuture<List<UserAccountDTO>> completableFuture = CompletableFuture.supplyAsync(
+                ()->{
+                   List<User> users = repository.findByRolesIn(Arrays.asList(role),pageable);
+                    return users.stream().map(user -> {
+                        UserAccountDTO userAccountDTO = new UserAccountDTO();
+                        mapper.map(user,userAccountDTO);
+                        return userAccountDTO;
+                    }).collect(Collectors.toList());
+
                 }
         );
 
