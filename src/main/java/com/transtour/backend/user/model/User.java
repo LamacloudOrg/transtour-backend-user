@@ -29,7 +29,6 @@ public class User {
     private String lastName;
     @Column(name = "enabled")
     private boolean enabled;
-
     @ManyToMany
     @JoinTable(
             name = "user_role",

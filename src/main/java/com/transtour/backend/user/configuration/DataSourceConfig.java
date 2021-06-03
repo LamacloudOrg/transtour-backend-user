@@ -13,9 +13,9 @@ public class DataSourceConfig {
     public DataSource getDataSource() {
         DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
         dataSourceBuilder.driverClassName("com.mysql.jdbc.Driver");
-        dataSourceBuilder.url("jdbc:mysql://localhost:3306/transtour?useSSL=false");
-        dataSourceBuilder.username("root");
-        dataSourceBuilder.password("1234");
+        dataSourceBuilder.url("jdbc:mysql://localhost:8081/transtour?useSSL=false");
+        dataSourceBuilder.username("transtourRoot");
+        dataSourceBuilder.password("transtourRoot");
         return dataSourceBuilder.build();
     }
 }
