@@ -1,4 +1,11 @@
 .gradle/
 .idea/
+.DS_Store
+src/.DS_Store
+src/main/.DS_Store
+src/main/java/.DS_Store
+src/main/java/com/.DS_Store
+src/main/java/com/transtour/.DS_Store
+src/main/java/com/transtour/backend/.DS_Store
+src/main/java/com/transtour/backend/user/.DS_Store
 build/
-

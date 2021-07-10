@@ -49,5 +49,9 @@ public class UserController {
         return service.findDrivers(role,pageable);
     }
 
-
+    @PostMapping("/update/password")
+    @ResponseStatus(HttpStatus.OK)
+    public CompletableFuture<String> updatePassword(@RequestBody  UserDTO user){
+        return service.updatePassword(user);
+    }
 }

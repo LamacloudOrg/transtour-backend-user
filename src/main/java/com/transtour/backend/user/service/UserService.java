@@ -77,4 +77,23 @@ public class UserService {
 
         return completableFuture;
     }
+
+    public CompletableFuture<String> updatePassword (UserDTO userDTO){
+
+        CompletableFuture<String> completableFuture = CompletableFuture.supplyAsync(
+                ()->{
+                    Optional<User> optionalUser = repository.findByUserName(userDTO.getUserName());
+
+                    optionalUser.orElseThrow(UserNotExists::new);
+                    User user = optionalUser.get();
+                //  if(!user.isEnabled()) throw new InactiveUser();
+                    user.setPassword(userDTO.getPassword());
+                    user.setEnabled(true);
+                    repository.save(user);
+                    return "Password Updated";
+                }
+        );
+
+        return completableFuture;
+    }
 }
