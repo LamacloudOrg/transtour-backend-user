@@ -1,6 +1,7 @@
 package com.transtour.backend.user.service;
 
 import com.github.dozermapper.core.Mapper;
+import com.transtour.backend.user.dto.RegisterDTO;
 import com.transtour.backend.user.dto.UserAccountDTO;
 import com.transtour.backend.user.dto.UserDTO;
 import com.transtour.backend.user.exception.InactiveUser;
@@ -71,6 +72,25 @@ public class UserService {
                         mapper.map(user,userAccountDTO);
                         return userAccountDTO;
                     }).collect(Collectors.toList());
+
+                }
+        );
+
+        return completableFuture;
+    }
+
+
+    public CompletableFuture<String> register(RegisterDTO registerDTO) {
+
+        CompletableFuture<String> completableFuture = CompletableFuture.supplyAsync(
+                ()->{
+                    Optional<User> userOpt = repository.findById(registerDTO.getId());
+                    userOpt.orElseThrow(UserNotExists::new);
+                    User user = userOpt.get();
+                    user.setEnabled(true);
+                    user.setPassword(registerDTO.getPassword());
+                    repository.save(user);
+                    return "se dio de alta";
 
                 }
         );

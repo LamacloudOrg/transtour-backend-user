@@ -1,5 +1,6 @@
 package com.transtour.backend.user.controller;
 
+import com.transtour.backend.user.dto.RegisterDTO;
 import com.transtour.backend.user.dto.UserAccountDTO;
 import com.transtour.backend.user.dto.UserDTO;
 import com.transtour.backend.user.model.User;
@@ -48,6 +49,13 @@ public class UserController {
         String role = "ROLE_DRIVER";
         return service.findDrivers(role,pageable);
     }
+
+    @PostMapping("/update/password")
+    @ResponseStatus(HttpStatus.OK)
+    public CompletableFuture<String> userRegister(@RequestBody RegisterDTO user){
+        return service.register(user);
+    }
+
 
 
 }
