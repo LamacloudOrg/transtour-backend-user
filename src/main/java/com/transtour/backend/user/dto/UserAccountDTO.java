@@ -10,7 +10,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 public class UserAccountDTO {
-    private String userName;
+    private Long dni;
     private boolean enabled;
     List<Role> roles;
 }

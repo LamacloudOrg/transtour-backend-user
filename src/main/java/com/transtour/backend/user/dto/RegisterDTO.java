@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class RegisterDTO {
-    private Long id;
+    private Long dni;
     private String password;
 }

@@ -38,8 +38,8 @@ public class UserController {
     @GetMapping
     @RolesAllowed({"ROLE_ADMIN"})
     @ResponseStatus(HttpStatus.OK)
-    public CompletableFuture<UserAccountDTO> findUser(@RequestParam("userName") String userName){
-        return service.find(userName);
+    public CompletableFuture<UserAccountDTO> findUser(@RequestParam("dni") Long dni){
+        return service.find(dni);
     }
 
     @GetMapping("drivers")

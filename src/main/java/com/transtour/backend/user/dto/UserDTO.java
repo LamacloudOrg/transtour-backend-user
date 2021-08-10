@@ -10,13 +10,13 @@ import lombok.Setter;
 
 public class UserDTO {
 
-    private String userName;
+    private Long dni;
     private String password;
 
     @Override
     public String toString() {
         return "UserDTO{" +
-                "userName='" + userName + '\'' +
+                "dni='" + dni + '\'' +
                 ", password='" + password + '\'' +
                 '}';
     }

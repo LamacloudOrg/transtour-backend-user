@@ -34,7 +34,7 @@ public class UserService {
 
         CompletableFuture<String> completableFuture = CompletableFuture.supplyAsync(
                 ()->{
-                    Optional<User> optionalUser = repository.findByUserNameAndPassword(userDTO.getUserName(), userDTO.getPassword());
+                    Optional<User> optionalUser = repository.findByDniAndPassword(userDTO.getDni(), userDTO.getPassword());
 
                     optionalUser.orElseThrow(UserNotExists::new);
                     User user = optionalUser.get();
@@ -46,11 +46,11 @@ public class UserService {
         return completableFuture;
     }
 
-    public CompletableFuture<UserAccountDTO> find(String userName){
+    public CompletableFuture<UserAccountDTO> find(Long dni){
 
         CompletableFuture<UserAccountDTO> completableFuture = CompletableFuture.supplyAsync(
                 ()->{
-                    Optional<User> optionalUser = repository.findByUserName(userName);
+                    Optional<User> optionalUser = repository.findByDni(dni);
                     optionalUser.orElseThrow(UserNotExists::new);
                     User user = optionalUser.get();
                     UserAccountDTO userAccountDTO = new UserAccountDTO();
@@ -84,7 +84,7 @@ public class UserService {
 
         CompletableFuture<String> completableFuture = CompletableFuture.supplyAsync(
                 ()->{
-                    Optional<User> userOpt = repository.findById(registerDTO.getId());
+                    Optional<User> userOpt = repository.findByDni(registerDTO.getDni());
                     userOpt.orElseThrow(UserNotExists::new);
                     User user = userOpt.get();
                     user.setEnabled(true);
