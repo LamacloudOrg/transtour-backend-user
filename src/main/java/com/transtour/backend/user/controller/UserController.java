@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
+import javax.ws.rs.QueryParam;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -42,6 +43,7 @@ public class UserController {
         return service.find(userName);
     }
 
+    /*
     @GetMapping("drivers")
     @RolesAllowed({"ROLE_ADMIN"})
     @ResponseStatus(HttpStatus.OK)
@@ -49,6 +51,7 @@ public class UserController {
         String role = "ROLE_DRIVER";
         return service.findDrivers(role,pageable);
     }
+    */
 
     @PostMapping("/update/password")
     @ResponseStatus(HttpStatus.OK)
@@ -56,6 +59,10 @@ public class UserController {
         return service.register(user);
     }
 
-
+    @GetMapping("/find/usersByType")
+    @ResponseStatus(HttpStatus.OK)
+    public CompletableFuture<List<UserDTO>> userByType (@QueryParam("userType") String userType){
+        return service.userByType(userType);
+    }
 
 }

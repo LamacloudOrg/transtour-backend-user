@@ -97,4 +97,21 @@ public class UserService {
 
         return completableFuture;
     }
+
+    public CompletableFuture<List<UserDTO>> userByType (String userType){
+
+        CompletableFuture<List<UserDTO>> completableFuture = CompletableFuture.supplyAsync(
+                ()->{
+                    List<User> users = repository.findByUserType(userType);
+                    return users.stream().map(user -> {
+                        UserDTO userDTO = new UserDTO();
+                        mapper.map(user,userDTO);
+                        return userDTO;
+                    }).collect(Collectors.toList());
+                }
+        );
+        return completableFuture;
+    }
+
+
 }
