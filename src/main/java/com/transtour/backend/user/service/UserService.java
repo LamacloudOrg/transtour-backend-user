@@ -1,8 +1,9 @@
 package com.transtour.backend.user.service;
 
 import com.github.dozermapper.core.Mapper;
+import com.transtour.backend.user.dto.CarDTO;
+import com.transtour.backend.user.dto.DriverDTO;
 import com.transtour.backend.user.dto.RegisterDTO;
-import com.transtour.backend.user.dto.UserAccountDTO;
 import com.transtour.backend.user.dto.UserDTO;
 import com.transtour.backend.user.exception.InactiveUser;
 import com.transtour.backend.user.exception.UserNotExists;
@@ -12,9 +13,6 @@ import com.transtour.backend.user.util.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.springframework.data.domain.Pageable;
-
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -30,7 +28,7 @@ public class UserService {
     @Autowired
     private Mapper mapper;
 
-    public CompletableFuture<String> generateToken(UserDTO userDTO){
+    public CompletableFuture<String> generateToken(RegisterDTO userDTO){
 
         CompletableFuture<String> completableFuture = CompletableFuture.supplyAsync(
                 ()->{
@@ -39,21 +37,21 @@ public class UserService {
                     optionalUser.orElseThrow(UserNotExists::new);
                     User user = optionalUser.get();
                     if(!user.isEnabled()) throw new InactiveUser();
-                    return TokenUtil.createJWT("1",user.getUserName(),"generacion token",2000L);
+                    return TokenUtil.createJWT("1",user.getDni().toString(),"generacion token",2000L);
                 }
         );
 
         return completableFuture;
     }
 
-    public CompletableFuture<UserAccountDTO> find(Long dni){
+    public CompletableFuture<UserDTO> find(Long dni){
 
-        CompletableFuture<UserAccountDTO> completableFuture = CompletableFuture.supplyAsync(
+        CompletableFuture<UserDTO> completableFuture = CompletableFuture.supplyAsync(
                 ()->{
                     Optional<User> optionalUser = repository.findByDni(dni);
                     optionalUser.orElseThrow(UserNotExists::new);
                     User user = optionalUser.get();
-                    UserAccountDTO userAccountDTO = new UserAccountDTO();
+                    UserDTO userAccountDTO = new UserDTO();
                     mapper.map(user,userAccountDTO);
                     return userAccountDTO;
                 }
@@ -62,22 +60,6 @@ public class UserService {
         return completableFuture;
     }
 
-    public CompletableFuture<List<UserAccountDTO>> findDrivers(String role,Pageable pageable){
-
-        CompletableFuture<List<UserAccountDTO>> completableFuture = CompletableFuture.supplyAsync(
-                ()->{
-                   List<User> users = repository.findByRolesIn(Arrays.asList(role),pageable);
-                    return users.stream().map(user -> {
-                        UserAccountDTO userAccountDTO = new UserAccountDTO();
-                        mapper.map(user,userAccountDTO);
-                        return userAccountDTO;
-                    }).collect(Collectors.toList());
-
-                }
-        );
-
-        return completableFuture;
-    }
 
 
     public CompletableFuture<String> register(RegisterDTO registerDTO) {
@@ -98,20 +80,26 @@ public class UserService {
         return completableFuture;
     }
 
-    public CompletableFuture<List<UserDTO>> userByType (String userType){
 
-        CompletableFuture<List<UserDTO>> completableFuture = CompletableFuture.supplyAsync(
+    public CompletableFuture<List<DriverDTO>> getAllDrivers(String role) {
+        CompletableFuture<List<DriverDTO>> completableFuture = CompletableFuture.supplyAsync(
                 ()->{
-                    List<User> users = repository.findByUserType(userType);
-                    return users.stream().map(user -> {
-                        UserDTO userDTO = new UserDTO();
-                        mapper.map(user,userDTO);
-                        return userDTO;
-                    }).collect(Collectors.toList());
-                }
-        );
+                return repository
+                .findByRole(role)
+                .stream()
+                .filter( user -> user.isEnabled())
+                .map(user -> {
+                    DriverDTO driverDTO = new DriverDTO();
+                    CarDTO carDTO = new CarDTO();
+                    mapper.map(user,driverDTO);
+                    if (user.getCar() != null)  mapper.map(user.getCar(),carDTO);
+                    else   driverDTO.setCar(carDTO);
+                    return driverDTO;
+                })
+                .collect(Collectors.toList());
+                });
+
         return completableFuture;
     }
-
 
 }

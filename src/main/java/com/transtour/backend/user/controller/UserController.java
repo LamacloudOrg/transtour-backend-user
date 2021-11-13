@@ -1,15 +1,12 @@
 package com.transtour.backend.user.controller;
 
+import com.transtour.backend.user.dto.DriverDTO;
 import com.transtour.backend.user.dto.RegisterDTO;
-import com.transtour.backend.user.dto.UserAccountDTO;
 import com.transtour.backend.user.dto.UserDTO;
-import com.transtour.backend.user.model.User;
 import com.transtour.backend.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.QueryParam;
 import java.util.List;
@@ -25,7 +22,7 @@ public class UserController {
 
     @PostMapping("/oauth/token")
     @ResponseStatus(HttpStatus.OK)
-    public CompletableFuture<String> login(@RequestBody  UserDTO user){
+    public CompletableFuture<String> login(@RequestBody RegisterDTO user){
         return service.generateToken(user);
     }
 
@@ -39,7 +36,7 @@ public class UserController {
     @GetMapping
     @RolesAllowed({"ROLE_ADMIN"})
     @ResponseStatus(HttpStatus.OK)
-    public CompletableFuture<UserAccountDTO> findUser(@RequestParam("dni") Long dni){
+    public CompletableFuture<UserDTO> findUser(@RequestParam("dni") Long dni){
         return service.find(dni);
     }
 
@@ -59,10 +56,12 @@ public class UserController {
         return service.register(user);
     }
 
-    @GetMapping("/find/usersByType")
+    @GetMapping("/find/drivers")
     @ResponseStatus(HttpStatus.OK)
-    public CompletableFuture<List<UserDTO>> userByType (@QueryParam("userType") String userType){
-        return service.userByType(userType);
+    public CompletableFuture<List<DriverDTO>> gertAllDrivers (@QueryParam("userType") String userType){
+        return service.getAllDrivers("DRIVER");
     }
+
+
 
 }

@@ -1,47 +1,37 @@
 package com.transtour.backend.user.model;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
+import lombok.Data;
 import javax.persistence.*;
-import java.util.List;
 
-@Getter
-@Setter
-@NoArgsConstructor
 @Entity
 @Table(name="users")
+@Data
 public class User {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
     @Column(name = "dni",unique = true)
     private Long dni;
-    @Column(name = "user_name",unique = true)
-    private String userName;
     @Column(name = "password")
     private String password;
-    @Column(name = "first_name")
-    //@NotEmpty(message = "Please provide your first name")
-    private String firstName;
-    @Column(name = "last_name")
-    //@NotEmpty(message = "Please provide your last name")
-    private String lastName;
+    @Column(name = "full_name")
+    private String fullName;
     @Column(name = "enabled")
     private boolean enabled;
-    @Column(name = "user_type")
-    private String userType;
+    @Column(name = "phone")
+    private String phone;
+    @Column(name = "mobile_phone")
+    private String mobilePhone;
+    @Column(name = "email")
+    private String email;
+    @Column(name = "user_role")
+    private String role;
 
-    @ManyToMany
-    @JoinTable(
-            name = "user_role",
-            joinColumns = @JoinColumn(
-                    name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(
-                    name = "role_id", referencedColumnName = "id"))
-    List<Role> roles;
 
+    @OneToOne(mappedBy = "driver", fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL)
+    private Car car;
+
+    @OneToOne(mappedBy = "driver", fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL)
+    private Licence licence;
 
 }

@@ -1,23 +1,15 @@
 package com.transtour.backend.user.dto;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
-@NoArgsConstructor
+import javax.persistence.Column;
+import javax.persistence.Id;
 
+@Data
 public class UserDTO {
-
     private Long dni;
-    private String password;
-
-    @Override
-    public String toString() {
-        return "UserDTO{" +
-                "dni='" + dni + '\'' +
-                ", password='" + password + '\'' +
-                '}';
-    }
+    private String fullName;
+    private String phone;
+    private String mobilePhone;
+    private String email;
 }
