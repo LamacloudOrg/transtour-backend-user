@@ -34,7 +34,7 @@ public class TokenUtil {
                 .setId(id)
                 .setIssuedAt(now)
                 .claim(AUTHORITIES_KEY,
-                        new ArrayList<SimpleGrantedAuthority>().add(new SimpleGrantedAuthority(role)))
+                        new ArrayList<String>().add(role))
                 .setSubject(subject)
                 //.setIssuer(issuer)
                 .signWith(signatureAlgorithm, signingKey);
