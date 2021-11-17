@@ -41,7 +41,7 @@ public class TokenUtil {
 
         //if it has been specified, let's add the expiration
         if (ttlMillis > 0) {
-            long expMillis = nowMillis + ttlMillis;
+            long expMillis = nowMillis + (ttlMillis * JWT_TOKEN_VALIDITY * 60); // token de 4 hs.
             Date exp = new Date(expMillis);
             builder.setExpiration(exp);
         }
