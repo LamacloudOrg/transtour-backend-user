@@ -37,7 +37,7 @@ public class UserService {
                     optionalUser.orElseThrow(UserNotExists::new);
                     User user = optionalUser.get();
                     if(!user.isEnabled()) throw new InactiveUser();
-                    return TokenUtil.createJWT("1",user.getDni().toString(),"generacion token",2000L);
+                    return TokenUtil.createJWT("1",null,user.getDni().toString(), user.getRole(),2000L);
                 }
         );
 
