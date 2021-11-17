@@ -33,10 +33,7 @@ public class TokenUtil {
         JwtBuilder builder = Jwts.builder()
                 .setId(id)
                 .setIssuedAt(now)
-                .claim(AUTHORITIES_KEY,
-                        new ArrayList<String>().add(role))
-                .setSubject(subject)
-                //.setIssuer(issuer)
+                .claim(AUTHORITIES_KEY,role)
                 .signWith(signatureAlgorithm, signingKey);
 
         //if it has been specified, let's add the expiration
