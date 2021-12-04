@@ -14,7 +14,7 @@ import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/v1/user")
-@CrossOrigin("*")
+//@CrossOrigin("*")
 public class UserController {
 
     @Autowired
