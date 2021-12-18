@@ -2,9 +2,6 @@ package com.transtour.backend.user.dto;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-
 @Data
 public class UserDTO {
     private Long dni;

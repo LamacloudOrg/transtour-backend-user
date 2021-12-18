@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Qualifier("licenceRepo")
 @Repository
-public interface LicenceRepository extends JpaRepository<Licence,Long> {
+public interface LicenceRepository extends JpaRepository<Licence, Long> {
 }

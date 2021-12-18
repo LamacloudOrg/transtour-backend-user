@@ -6,13 +6,13 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name="licences")
+@Table(name = "licences")
 @Data
 public class Licence {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "lcence_id",unique = true)
+    @Column(name = "lcence_id", unique = true)
     private Long id;
     @Column(name = "due_date")
     private LocalDate dueDate;

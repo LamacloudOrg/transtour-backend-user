@@ -5,7 +5,7 @@ import com.transtour.backend.user.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import javax.ws.rs.QueryParam;
+
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -19,7 +19,7 @@ public class CompanyController {
 
     @GetMapping()
     @ResponseStatus(HttpStatus.OK)
-    public CompletableFuture<List<CompanyDTO>> gertAllCompanies (){
+    public CompletableFuture<List<CompanyDTO>> gertAllCompanies() {
         return service.getAllComapies();
     }
 }

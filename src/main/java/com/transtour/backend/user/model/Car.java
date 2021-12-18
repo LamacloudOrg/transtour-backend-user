@@ -5,12 +5,12 @@ import lombok.Data;
 import javax.persistence.*;
 
 @Entity
-@Table(name="cars")
+@Table(name = "cars")
 @Data
 public class Car {
 
     @Id
-    @Column(name = "patent",unique = true)
+    @Column(name = "patent", unique = true)
     private String id;
 
     @Column(name = "brand")
@@ -23,10 +23,10 @@ public class Car {
     private String color;
 
     @OneToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "driver", nullable = false,updatable = false)
+    @JoinColumn(name = "driver", nullable = false, updatable = false)
     private User driver;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "driver", nullable = false, insertable = false,updatable = false)
+    @JoinColumn(name = "driver", nullable = false, insertable = false, updatable = false)
     private User owner;
 }

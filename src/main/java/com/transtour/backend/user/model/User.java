@@ -1,14 +1,15 @@
 package com.transtour.backend.user.model;
 
 import lombok.Data;
+
 import javax.persistence.*;
 
 @Entity
-@Table(name="users")
+@Table(name = "users")
 @Data
 public class User {
     @Id
-    @Column(name = "dni",unique = true)
+    @Column(name = "dni", unique = true)
     private Long dni;
     @Column(name = "password")
     private String password;

@@ -3,21 +3,19 @@ package com.transtour.backend.user.util;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
-import java.util.ArrayList;
 import java.util.Date;
 
 public class TokenUtil {
 
     private static String SECRET_KEY = "test";
-    private static String AUTHORITIES_KEY ="authorities";
-    private static long JWT_TOKEN_VALIDITY =20l;
+    private static String AUTHORITIES_KEY = "authorities";
+    private static long JWT_TOKEN_VALIDITY = 20l;
 
-    public static String createJWT(String id, String issuer, String subject,String role ,long ttlMillis) {
+    public static String createJWT(String id, String issuer, String subject, String role, long ttlMillis) {
 
         //The JWT signature algorithm we will be using to sign the token
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS512;
@@ -33,7 +31,7 @@ public class TokenUtil {
         JwtBuilder builder = Jwts.builder()
                 .setId(id)
                 .setIssuedAt(now)
-                .claim(AUTHORITIES_KEY,role)
+                .claim(AUTHORITIES_KEY, role)
                 .signWith(signatureAlgorithm, signingKey);
 
         //if it has been specified, let's add the expiration

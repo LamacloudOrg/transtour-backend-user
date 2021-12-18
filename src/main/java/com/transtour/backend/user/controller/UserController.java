@@ -7,6 +7,7 @@ import com.transtour.backend.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.QueryParam;
 import java.util.List;
@@ -22,13 +23,13 @@ public class UserController {
 
     @PostMapping("/oauth/token")
     @ResponseStatus(HttpStatus.OK)
-    public CompletableFuture<String> login(@RequestBody RegisterDTO user){
+    public CompletableFuture<String> login(@RequestBody RegisterDTO user) {
         return service.generateToken(user);
     }
 
     @PostMapping("/oauth/refresh")
     @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
-    public String refreshToken(@RequestBody  UserDTO user){
+    public String refreshToken(@RequestBody UserDTO user) {
         return "por implementar";
     }
 
@@ -36,7 +37,7 @@ public class UserController {
     @GetMapping
     @RolesAllowed({"ROLE_ADMIN"})
     @ResponseStatus(HttpStatus.OK)
-    public CompletableFuture<UserDTO> findUser(@RequestParam("dni") Long dni){
+    public CompletableFuture<UserDTO> findUser(@RequestParam("dni") Long dni) {
         return service.find(dni);
     }
 
@@ -52,16 +53,15 @@ public class UserController {
 
     @PostMapping("/update/password")
     @ResponseStatus(HttpStatus.OK)
-    public CompletableFuture<String> userRegister(@RequestBody RegisterDTO user){
+    public CompletableFuture<String> userRegister(@RequestBody RegisterDTO user) {
         return service.register(user);
     }
 
     @GetMapping("/find/drivers")
     @ResponseStatus(HttpStatus.OK)
-    public CompletableFuture<List<DriverDTO>> gertAllDrivers (@QueryParam("userType") String userType){
+    public CompletableFuture<List<DriverDTO>> gertAllDrivers(@QueryParam("userType") String userType) {
         return service.getAllDrivers("DRIVER");
     }
-
 
 
 }

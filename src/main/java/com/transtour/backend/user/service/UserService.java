@@ -13,6 +13,7 @@ import com.transtour.backend.user.util.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -28,31 +29,31 @@ public class UserService {
     @Autowired
     private Mapper mapper;
 
-    public CompletableFuture<String> generateToken(RegisterDTO userDTO){
+    public CompletableFuture<String> generateToken(RegisterDTO userDTO) {
 
         CompletableFuture<String> completableFuture = CompletableFuture.supplyAsync(
-                ()->{
+                () -> {
                     Optional<User> optionalUser = repository.findByDniAndPassword(userDTO.getDni(), userDTO.getPassword());
 
                     optionalUser.orElseThrow(UserNotExists::new);
                     User user = optionalUser.get();
-                    if(!user.isEnabled()) throw new InactiveUser();
-                    return TokenUtil.createJWT("1",null,user.getDni().toString(), user.getRole(),2000L);
+                    if (!user.isEnabled()) throw new InactiveUser();
+                    return TokenUtil.createJWT("1", null, user.getDni().toString(), user.getRole(), 2000L);
                 }
         );
 
         return completableFuture;
     }
 
-    public CompletableFuture<UserDTO> find(Long dni){
+    public CompletableFuture<UserDTO> find(Long dni) {
 
         CompletableFuture<UserDTO> completableFuture = CompletableFuture.supplyAsync(
-                ()->{
+                () -> {
                     Optional<User> optionalUser = repository.findByDni(dni);
                     optionalUser.orElseThrow(UserNotExists::new);
                     User user = optionalUser.get();
                     UserDTO userAccountDTO = new UserDTO();
-                    mapper.map(user,userAccountDTO);
+                    mapper.map(user, userAccountDTO);
                     return userAccountDTO;
                 }
         );
@@ -61,11 +62,10 @@ public class UserService {
     }
 
 
-
     public CompletableFuture<String> register(RegisterDTO registerDTO) {
 
         CompletableFuture<String> completableFuture = CompletableFuture.supplyAsync(
-                ()->{
+                () -> {
                     Optional<User> userOpt = repository.findByDni(registerDTO.getDni());
                     userOpt.orElseThrow(UserNotExists::new);
                     User user = userOpt.get();
@@ -83,20 +83,20 @@ public class UserService {
 
     public CompletableFuture<List<DriverDTO>> getAllDrivers(String role) {
         CompletableFuture<List<DriverDTO>> completableFuture = CompletableFuture.supplyAsync(
-                ()->{
-                return repository
-                .findByRole(role)
-                .stream()
-                .filter( user -> user.isEnabled())
-                .map(user -> {
-                    DriverDTO driverDTO = new DriverDTO();
-                    CarDTO carDTO = new CarDTO();
-                    mapper.map(user,driverDTO);
-                    if (user.getCar() != null)  mapper.map(user.getCar(),carDTO);
-                    else   driverDTO.setCar(carDTO);
-                    return driverDTO;
-                })
-                .collect(Collectors.toList());
+                () -> {
+                    return repository
+                            .findByRole(role)
+                            .stream()
+                            .filter(user -> user.isEnabled())
+                            .map(user -> {
+                                DriverDTO driverDTO = new DriverDTO();
+                                CarDTO carDTO = new CarDTO();
+                                mapper.map(user, driverDTO);
+                                if (user.getCar() != null) mapper.map(user.getCar(), carDTO);
+                                else driverDTO.setCar(carDTO);
+                                return driverDTO;
+                            })
+                            .collect(Collectors.toList());
                 });
 
         return completableFuture;

@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Qualifier("carRepo")
 @Repository
-public interface CarRepository  extends JpaRepository<Car,Long> {
+public interface CarRepository extends JpaRepository<Car, Long> {
 }
