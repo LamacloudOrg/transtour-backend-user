@@ -1,14 +1,13 @@
 package com.transtour.backend.user.service;
 
 import com.github.dozermapper.core.Mapper;
-import com.transtour.backend.user.dto.CarDTO;
-import com.transtour.backend.user.dto.DriverDTO;
-import com.transtour.backend.user.dto.RegisterDTO;
-import com.transtour.backend.user.dto.UserDTO;
+import com.transtour.backend.user.dto.*;
 import com.transtour.backend.user.exception.InactiveUser;
 import com.transtour.backend.user.exception.UserNotExists;
 import com.transtour.backend.user.model.User;
+import com.transtour.backend.user.repository.INotification;
 import com.transtour.backend.user.repository.UserRepository;
+import com.transtour.backend.user.util.PasswordUtil;
 import com.transtour.backend.user.util.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -25,6 +24,9 @@ public class UserService {
     @Autowired
     @Qualifier("userRepo")
     UserRepository repository;
+
+    @Autowired
+    INotification serviceNotication;
 
     @Autowired
     private Mapper mapper;
@@ -62,21 +64,27 @@ public class UserService {
     }
 
 
-    public CompletableFuture<String> register(RegisterDTO registerDTO) {
+    public CompletableFuture<String> activate(Long dni,String randomPassword) {
 
         CompletableFuture<String> completableFuture = CompletableFuture.supplyAsync(
                 () -> {
-                    Optional<User> userOpt = repository.findByDni(registerDTO.getDni());
+                    Optional<User> userOpt = repository.findByDni(dni);
                     userOpt.orElseThrow(UserNotExists::new);
                     User user = userOpt.get();
                     user.setEnabled(true);
-                    user.setPassword(registerDTO.getPassword());
+                    user.setPassword(randomPassword);
                     repository.save(user);
-                    return "se dio de alta";
-
+                    return randomPassword;
                 }
         );
 
+        return completableFuture;
+    }
+
+    public CompletableFuture<Void> sendCodeByEmail(ActivationAccountDTO activationAccountDTO){
+        CompletableFuture<Void> completableFuture = CompletableFuture.runAsync(
+                ()-> this.serviceNotication.sendActivationCode(activationAccountDTO)
+        );
         return completableFuture;
     }
 
@@ -102,4 +110,13 @@ public class UserService {
         return completableFuture;
     }
 
+    public CompletableFuture<Void> reactivate(Long dni) {
+        CompletableFuture activate = this.activate(dni, PasswordUtil.radomGenerator());
+        activate.thenAccept(code -> this.sendCodeByEmail(new ActivationAccountDTO(dni,(String) code)));
+        return activate;
+    }
+
+    public CompletableFuture<String> register(RegisterDTO user) {
+        return this.activate(user.getDni(), user.getPassword());
+    }
 }

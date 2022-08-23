@@ -33,6 +33,12 @@ public class UserController {
         return "por implementar";
     }
 
+    @PutMapping("/activateAccount")
+    @ResponseStatus(HttpStatus.OK)
+    public CompletableFuture<Void> reactivate(Long dni){
+        return service.reactivate(dni);
+    }
+
 
     @GetMapping
     @RolesAllowed({"ROLE_ADMIN"})
