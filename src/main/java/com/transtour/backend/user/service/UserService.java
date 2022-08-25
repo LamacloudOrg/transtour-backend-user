@@ -26,6 +26,7 @@ public class UserService {
     UserRepository repository;
 
     @Autowired
+    @Qualifier("NotificationClient")
     INotification serviceNotication;
 
     @Autowired

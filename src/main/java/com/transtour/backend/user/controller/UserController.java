@@ -35,10 +35,9 @@ public class UserController {
 
     @PutMapping("/activateAccount")
     @ResponseStatus(HttpStatus.OK)
-    public CompletableFuture<Void> reactivate(Long dni){
+    public CompletableFuture<Void> reactivate(@RequestBody Long dni) {
         return service.reactivate(dni);
     }
-
 
     @GetMapping
     @RolesAllowed({"ROLE_ADMIN"})
