@@ -22,4 +22,10 @@ public class CompanyController {
     public CompletableFuture<List<CompanyDTO>> gertAllCompanies() {
         return service.getAllComapies();
     }
+
+    @GetMapping()
+    @ResponseStatus(HttpStatus.OK)
+    public CompletableFuture<CompanyDTO> getCompanyByName(@RequestParam(name = "fullName") String fullName) {
+        return service.getCompanyByName(fullName);
+    }
 }

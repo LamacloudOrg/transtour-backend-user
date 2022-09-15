@@ -25,4 +25,8 @@ public class Company {
     private String email;
     @Column(name = "phone")
     private String phone;
+    @Column(name = "whiting_time_amount")
+    private String whitingTimeAmount;
+    @Column(name = "disposition_time_amount")
+    private String dispositionTimeAmount;
 }
