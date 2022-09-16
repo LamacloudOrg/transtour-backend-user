@@ -26,7 +26,7 @@ public class Company {
     @Column(name = "phone")
     private String phone;
     @Column(name = "whiting_time_amount")
-    private String whitingTimeAmount;
+    private Double whitingTimeAmount;
     @Column(name = "disposition_time_amount")
-    private String dispositionTimeAmount;
+    private Double dispositionTimeAmount;
 }
