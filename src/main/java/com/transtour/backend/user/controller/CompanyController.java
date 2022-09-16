@@ -4,6 +4,7 @@ import com.transtour.backend.user.dto.CompanyDTO;
 import com.transtour.backend.user.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,9 +24,9 @@ public class CompanyController {
         return service.getAllComapies();
     }
 
-    @GetMapping("/search")
+    @GetMapping("/{fullName}")
     @ResponseStatus(HttpStatus.OK)
-    public CompletableFuture<CompanyDTO> getCompanyByName(@RequestParam(name = "fullName") String fullName) {
+    public CompletableFuture<CompanyDTO> getCompanyByName(@PathVariable String fullName) throws Exception {
         return service.getCompanyByName(fullName);
     }
 }
