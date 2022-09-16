@@ -8,6 +8,8 @@ import com.transtour.backend.user.exception.UserNotExists;
 import com.transtour.backend.user.model.Company;
 import com.transtour.backend.user.model.User;
 import com.transtour.backend.user.repository.CompanyRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,8 @@ public class CompanyService {
 
     @Autowired
     private Mapper mapper;
+
+    private static final Logger LOG = LoggerFactory.getLogger(CompanyService.class);
 
 
     public CompletableFuture<List<CompanyDTO>> getAllComapies() {
@@ -49,7 +53,10 @@ public class CompanyService {
 
                 CompletableFuture<CompanyDTO> completableFuture = CompletableFuture.supplyAsync(
                         () -> {
+                            LOG.info("que tiene fullName: " + fullName);
                             Optional<Company> optionalCompany = repository.findByFullName(fullName);
+                            LOG.info("que tiene optionalCompany: " + optionalCompany.toString());
+
                             optionalCompany.orElseThrow(CompanyNotExists::new);
                             CompanyDTO companyDTO = new CompanyDTO();
                             mapper.map(optionalCompany, companyDTO);

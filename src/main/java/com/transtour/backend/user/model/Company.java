@@ -29,4 +29,18 @@ public class Company {
     private Double whitingTimeAmount;
     @Column(name = "disposition_time_amount")
     private Double dispositionTimeAmount;
+
+    @Override
+    public String toString() {
+        return "Company{" +
+                "id=" + id +
+                ", fullName='" + fullName + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", cuit='" + cuit + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", whitingTimeAmount=" + whitingTimeAmount +
+                ", dispositionTimeAmount=" + dispositionTimeAmount +
+                '}';
+    }
 }
