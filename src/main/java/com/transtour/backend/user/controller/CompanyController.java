@@ -23,7 +23,7 @@ public class CompanyController {
         return service.getAllComapies();
     }
 
-    @GetMapping()
+    @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
     public CompletableFuture<CompanyDTO> getCompanyByName(@RequestParam(name = "fullName") String fullName) {
         return service.getCompanyByName(fullName);
