@@ -59,7 +59,7 @@ public class CompanyService {
 
                             optionalCompany.orElseThrow(CompanyNotExists::new);
                             CompanyDTO companyDTO = new CompanyDTO();
-                            mapper.map(optionalCompany, companyDTO);
+                            mapper.map(optionalCompany.get(), companyDTO);
                             return companyDTO;
                         }
                 );
