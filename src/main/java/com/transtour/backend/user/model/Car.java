@@ -10,8 +10,12 @@ import javax.persistence.*;
 public class Car {
 
     @Id
-    @Column(name = "patent", unique = true)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "car_id")
+    private Long id;
+
+    @Column(name = "patent")
+    private String patent;
 
     @Column(name = "brand")
     private String brand;
