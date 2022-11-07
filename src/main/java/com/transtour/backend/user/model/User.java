@@ -3,6 +3,7 @@ package com.transtour.backend.user.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -27,12 +28,9 @@ public class User {
     private String role;
 
 
-    @OneToOne(mappedBy = "driver", fetch = FetchType.EAGER,
-            cascade = CascadeType.ALL)
-    private Car car;
-
-    @OneToOne(mappedBy = "driver", fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "driver", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Licence licence;
 
+    @OneToMany(mappedBy = "driver", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Car> cars;
 }

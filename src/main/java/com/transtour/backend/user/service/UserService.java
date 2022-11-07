@@ -91,7 +91,7 @@ public class UserService {
 
 
     public CompletableFuture<List<DriverDTO>> getAllDrivers(String role) {
-        CompletableFuture<List<DriverDTO>> completableFuture = CompletableFuture.supplyAsync(
+        return CompletableFuture.supplyAsync(
                 () -> {
                     return repository
                             .findByRole(role)
@@ -99,16 +99,18 @@ public class UserService {
                             .filter(user -> user.isEnabled())
                             .map(user -> {
                                 DriverDTO driverDTO = new DriverDTO();
-                                CarDTO carDTO = new CarDTO();
                                 mapper.map(user, driverDTO);
-                                if (user.getCar() != null) mapper.map(user.getCar(), carDTO);
-                                else driverDTO.setCar(carDTO);
+                                driverDTO.setCar(
+                                        user.getCars().stream().map(car -> {
+                                            CarDTO carDTO = new CarDTO();
+                                            mapper.map(car, carDTO);
+                                            return carDTO;
+                                        }).collect(Collectors.toList()));
+
                                 return driverDTO;
                             })
                             .collect(Collectors.toList());
                 });
-
-        return completableFuture;
     }
 
     public CompletableFuture<Void> reactivate(Long dni) {
